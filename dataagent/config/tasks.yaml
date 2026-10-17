@@ -1,0 +1,65 @@
+generate_questions:
+  description: |
+    Here is a profile of a dataset (exact column names, types and value ranges):
+    {data_card}
+
+    Write {how_many} analysis questions that give real insight into this data.
+    Rules:
+    - Each question uses 1 or 2 columns, written EXACTLY as in the profile.
+    - Prefer questions about the outcome/target column if there is one.
+    - Each question must be answerable with a basic method: distribution, group comparison
+      (t-test/ANOVA), correlation, or chi-square test.
+  expected_output: A JSON object with a list "questions"; each item has "question", "columns" (list) and "method".
+  agent: business_consultant
+
+write_code:
+  description: |
+    Dataset profile:
+    {data_card}
+
+    Question: {question}
+    Columns to use: {columns}. Suggested method: {method}.
+
+    Write ONE Python script that answers the question. Rules:
+    - The variables DATA_PATH (csv file) and OUT_DIR (folder for images) already exist. Load with pd.read_csv(DATA_PATH).
+    - The data is already cleaned. Use only the columns needed. Drop missing values for those columns.
+    - Use pandas, numpy, scipy.stats, matplotlib or seaborn. No network, no files other than DATA_PATH.
+    - print() every number you will rely on, with a label, e.g. print("p-value =", round(p, 4)).
+    - Make exactly one clear chart and save it with plt.savefig(os.path.join(OUT_DIR, "chart.png"), bbox_inches="tight").
+    {feedback}
+  expected_output: Only the Python code in one ```python fenced block.
+  agent: data_scientist
+
+interpret:
+  description: |
+    Question: {question}
+
+    Raw output of the executed analysis code:
+    ----
+    {output}
+    ----
+    Write a short answer (3-5 sentences) for a non-technical reader.
+    - Use ONLY numbers that appear in the output above, copied exactly or rounded.
+    - Call a result "significant" only if a printed p-value is below 0.05.
+    - Do not say one variable causes another; say "is associated with".
+    {feedback}
+  expected_output: A plain-text answer of 3-5 sentences.
+  agent: data_scientist
+
+critique:
+  description: |
+    Question: {question}
+
+    Raw code output:
+    ----
+    {output}
+    ----
+    Draft answer:
+    ----
+    {summary}
+    ----
+    Automatic checks found these problems (may be empty): {issues}
+
+    Decide if the draft is correct, supported by the output, and actually answers the question.
+  expected_output: A JSON object with "approved" (true/false) and "feedback" (what exactly to fix, or "ok").
+  agent: critic
