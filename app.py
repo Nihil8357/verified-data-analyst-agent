@@ -8,7 +8,7 @@ import pandas as pd
 import streamlit as st
 
 from dataagent import pipeline
-from dataagent.llm import ModelUnavailable, describe, get_llm
+from dataagent.llm import BadKey, ModelUnavailable, clean_key, describe, get_llm
 from dataagent.report import BADGE, html_report, markdown
 
 ROOT = Path(__file__).resolve().parent
@@ -20,6 +20,14 @@ st.set_page_config(page_title="Verified Data Analyst Agent", layout="wide")
 ss = st.session_state
 
 
+def friendly(e: Exception) -> str:
+    if isinstance(e, (BadKey, ModelUnavailable)):
+        return str(e)
+    if "connection" in type(e).__name__.lower() or "timeout" in type(e).__name__.lower():
+        return "Could not reach Groq. Check your internet connection and try again."
+    return f"Something went wrong: {type(e).__name__}: {str(e)[:300]}"
+
+
 def save_key(key: str) -> None:
     env = ROOT / ".env"
     lines = env.read_text(encoding="utf-8").splitlines() if env.exists() else []
@@ -29,13 +37,18 @@ def save_key(key: str) -> None:
 
 with st.sidebar:
     st.header("Settings")
-    if not os.getenv("GROQ_API_KEY"):
-        key = st.text_input("Groq API key (free at console.groq.com)", type="password")
+    if not clean_key(os.getenv("GROQ_API_KEY", "")):
+        key = clean_key(st.text_input("Groq API key (free at console.groq.com)", type="password"))
         if key:
-            os.environ["GROQ_API_KEY"] = key.strip()
-            save_key(key.strip())
+            os.environ["GROQ_API_KEY"] = key
+            save_key(key)
             ss.pop("llm", None)
             st.rerun()
+    elif st.button("Change key"):
+        os.environ["GROQ_API_KEY"] = ""
+        save_key("")
+        ss.pop("llm", None)
+        st.rerun()
     if "llm" not in ss:
         ss.llm = get_llm()
     st.caption(f"Model: **{describe(ss.llm)}**")
@@ -94,8 +107,8 @@ if "session" in ss:
         with st.spinner("Business Consultant agent is reading the data..."):
             try:
                 ss.questions = pipeline.plan(s, ss.llm, n_q)
-            except ModelUnavailable as e:
-                st.error(str(e))
+            except Exception as e:  # BadKey, ModelUnavailable, network errors
+                st.error(friendly(e))
     if "questions" in ss:
         st.caption("Edit, remove or add questions before the analysis runs.")
         edited = []
@@ -115,9 +128,9 @@ if "session" in ss:
                 try:
                     ss.findings = pipeline.run_all(s, edited, ss.llm, lambda k, t: st.write(f"{ICON.get(k, '')} {t}"))
                     status.update(label="Analysis complete", state="complete")
-                except ModelUnavailable as e:
+                except Exception as e:  # BadKey, ModelUnavailable, network errors
                     status.update(label="Stopped", state="error")
-                    st.error(str(e))
+                    st.error(friendly(e))
 
 # ---------------- 3. report
 def show(f, i):
@@ -163,6 +176,6 @@ if ss.get("findings"):
             try:
                 ss.chat.append(pipeline.ask(ss.session, question, ss.llm, 100 + len(ss.chat),
                                             lambda k, t: st.write(f"{ICON.get(k, '')} {t}")))
-            except ModelUnavailable as e:
-                st.error(str(e))
+            except Exception as e:  # BadKey, ModelUnavailable, network errors
+                st.error(friendly(e))
         st.rerun()

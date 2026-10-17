@@ -233,3 +233,15 @@ def test_sample_datasets_all_verified(name, tmp_path):
     s = pipeline.prepare(str(ROOT / "data" / f"{name}.csv"), str(tmp_path / name), desc)
     fs = pipeline.run_all(s, pipeline.plan(s, None, 3), None)
     assert len(fs) == 3 and all(f.label == "Verified" for f in fs)
+
+
+def test_pasted_key_is_cleaned_and_bad_key_gives_clear_message(monkeypatch):
+    from dataagent.llm import BadKey, GroqLLM, clean_key
+    assert clean_key(' "gsk_abc123\\\\ \n') == "gsk_abc123"            # spaces, quotes, stray backslash removed
+    llm = GroqLLM(api_key="gsk_bad")
+
+    def create(model, **kw):
+        raise RuntimeError("Error code: 401 - {'error': {'message': 'Invalid API Key', 'code': 'invalid_api_key'}}")
+    monkeypatch.setattr(llm._client.chat.completions, "create", create)
+    with pytest.raises(BadKey, match="Groq rejected the API key"):
+        llm.call("hi")

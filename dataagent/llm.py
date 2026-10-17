@@ -22,6 +22,16 @@ class ModelUnavailable(RuntimeError):
     pass
 
 
+class BadKey(RuntimeError):
+    pass
+
+
+def clean_key(key: str) -> str:
+    """Groq keys contain only letters, digits and '_'. Pasting often adds spaces, quotes or a stray '\\'."""
+    import re
+    return re.sub(r"[^A-Za-z0-9_]", "", key or "")
+
+
 def _daily(e: Exception) -> bool:
     t = str(e).lower()
     return "tokens per day" in t or "(tpd)" in t or "requests per day" in t
@@ -84,6 +94,9 @@ class GroqLLM(BaseLLM):
                     self.tokens += getattr(r.usage, "total_tokens", 0) or 0
                     return r.choices[0].message.content or ""
                 except Exception as e:
+                    if "invalid_api_key" in str(e).lower() or "401" in str(e):
+                        raise BadKey("Groq rejected the API key. Create or copy it again at console.groq.com/keys "
+                                     "(it starts with gsk_) and paste it with the 'Change key' button.") from e
                     if _daily(e) or _gone(e):
                         break
                     if _minute(e) and attempt < 2:
@@ -100,7 +113,7 @@ class GroqLLM(BaseLLM):
 def get_llm():
     if os.getenv("AGENT_OFFLINE") == "1":
         return None
-    key = os.getenv("GROQ_API_KEY", "").strip()
+    key = clean_key(os.getenv("GROQ_API_KEY", ""))
     return GroqLLM(api_key=key) if key else None
 
 
