@@ -1,0 +1,28 @@
+Model: Demo mode (no AI model: built-in statistical templates)
+Cleaning: Missing values kept (not guessed): bill_length_mm=2, bill_depth_mm=2, flipper_length_mm=2, body_mass_g=2, sex=11.
+
+[plan    ] Demo mode: 4 questions chosen by built-in rules
+[question] Q1: Does body_mass_g differ between the sex groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q2: Does bill_depth_mm differ between the sex groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q3: Is species associated with sex?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q4: How strongly are flipper_length_mm and body_mass_g correlated?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[done    ] 4 questions in 7.4s
+
+1. Does body_mass_g differ between the sex groups?
+   [Verified] Mean body_mass_g by sex is FEMALE: 3862.27, MALE: 4545.68. The difference (Welch t-test) is statistically significant (p-value = 4.794e-16).
+2. Does bill_depth_mm differ between the sex groups?
+   [Verified] Mean bill_depth_mm by sex is FEMALE: 16.43, MALE: 17.89. The difference (Welch t-test) is statistically significant (p-value = 2.036e-12).
+3. Is species associated with sex?
+   [Verified] The association between species and sex (chi-square = 0.049) is not statistically significant (p-value = 0.976). See the percentage table above for how the rates differ.
+4. How strongly are flipper_length_mm and body_mass_g correlated?
+   [Verified] flipper_length_mm and body_mass_g show a strong positive correlation (Pearson r = 0.871, n = 342), which is statistically significant (p-value = 4.371e-107). Correlation does not imply causation.
+
+Report: output/run_20261017_080435/report.html

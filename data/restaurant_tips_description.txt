@@ -1,0 +1,9 @@
+244 restaurant bills recorded by one waiter over a few months.
+total_bill: bill amount in dollars
+tip: tip amount in dollars
+sex: sex of the person paying
+smoker: whether the party included smokers
+day: day of the week (Thur, Fri, Sat, Sun)
+time: Lunch or Dinner
+size: number of people in the party
+Source: Bryant & Smith (1995), via seaborn sample data.

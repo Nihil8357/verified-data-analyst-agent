@@ -1,0 +1,28 @@
+Model: Demo mode (no AI model: built-in statistical templates)
+Cleaning: Found 111 identical rows; kept them, because without an ID column they may be different records. Remove them yourself only if you know they are entry errors. Missing values kept (not guessed): age=177, embarked=2.
+
+[plan    ] Demo mode: 4 questions chosen by built-in rules
+[question] Q1: Does fare differ between the survived groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q2: Does parch differ between the survived groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q3: Is pclass associated with survived?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q4: How strongly are sibsp and parch correlated?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[done    ] 4 questions in 6.8s
+
+1. Does fare differ between the survived groups?
+   [Verified] Mean fare by survived is 0: 22.12, 1: 48.4. The difference (Welch t-test) is statistically significant (p-value = 2.699e-11).
+2. Does parch differ between the survived groups?
+   [Verified] Mean parch by survived is 0: 0.33, 1: 0.46. The difference (Welch t-test) is statistically significant (p-value = 0.01339).
+3. Is pclass associated with survived?
+   [Verified] The association between pclass and survived (chi-square = 102.889) is statistically significant (p-value = 4.549e-23). See the percentage table above for how the rates differ.
+4. How strongly are sibsp and parch correlated?
+   [Verified] sibsp and parch show a moderate positive correlation (Pearson r = 0.415, n = 891), which is statistically significant (p-value = 2.242e-38). Correlation does not imply causation.
+
+Report: output/run_20261017_080425/report.html

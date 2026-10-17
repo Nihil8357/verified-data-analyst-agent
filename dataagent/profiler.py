@@ -52,8 +52,10 @@ def clean(df: pd.DataFrame) -> CleanResult:
 
     dups = int(df.duplicated().sum())
     if dups:
-        df = df.drop_duplicates().reset_index(drop=True)
-        log.append(f"Removed {dups} duplicate rows.")
+        # Not removed: without an ID column, identical rows can be different real people or events
+        # (e.g. two Titanic passengers with the same class, sex, age and fare). Deleting them would bias results.
+        log.append(f"Found {dups} identical rows; kept them, because without an ID column they may be different "
+                   f"records. Remove them yourself only if you know they are entry errors.")
 
     empty = [c for c in df.columns if df[c].isna().all()]
     if empty:
@@ -72,7 +74,13 @@ def column_kind(s: pd.Series) -> str:
     if pd.api.types.is_bool_dtype(s):
         return "binary"
     if pd.api.types.is_numeric_dtype(s):
-        return "binary" if s.dropna().nunique() == 2 else "numeric"
+        vals = s.dropna()
+        n = vals.nunique()
+        if n == 2:
+            return "binary"
+        if n <= 5 and (vals == vals.round()).all():
+            return "categorical"          # codes such as ticket class 1/2/3 are categories, not quantities
+        return "numeric"
     n = s.dropna().nunique()
     if n == 2:
         return "binary"

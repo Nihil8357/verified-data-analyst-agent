@@ -1,0 +1,11 @@
+Passengers of the Titanic, which sank in April 1912 (891 passengers from the well-known training set).
+survived: 1 = survived, 0 = died (the outcome)
+pclass: ticket class (1 = first, 2 = second, 3 = third)
+sex: male / female
+age: age in years (some missing)
+sibsp: number of siblings or spouses aboard
+parch: number of parents or children aboard
+fare: ticket price in pounds
+embarked: port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton)
+alone: True if travelling without family
+Source: seaborn sample data (originally Kaggle / Encyclopedia Titanica); duplicate columns removed.

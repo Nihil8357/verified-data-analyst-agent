@@ -1,0 +1,8 @@
+Measurements of 344 adult penguins from three species on three islands of the Palmer Archipelago, Antarctica.
+species: Adelie, Chinstrap or Gentoo
+island: Biscoe, Dream or Torgersen
+bill_length_mm, bill_depth_mm: size of the bill in millimetres
+flipper_length_mm: flipper length in millimetres
+body_mass_g: body mass in grams
+sex: Male / Female (a few missing)
+Source: Palmer Penguins dataset (Gorman, Williams & Fraser, 2014), via seaborn sample data.

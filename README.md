@@ -19,9 +19,9 @@ This version is rewritten. These are the improvements:
 | Summaries are trusted as written | **Verifier and Critic agent** (Reflection pattern) check numbers, p-values, causal wording and column names; wrong answers are revised (up to 2 times) |
 | Questions can name columns that don't exist | Questions with invented columns are dropped and replaced |
 | No user control | **Human in the loop**: edit, remove or add questions before the analysis runs |
-| Data cleaning was a TODO | Cleaning step: index columns, duplicates, text-encoded numbers, empty columns |
+| Data cleaning was a TODO | Cleaning step: index columns, text-encoded numbers, empty columns; duplicate rows are flagged but kept (see below) |
 | Command line only | **Streamlit app**, **Ask your data** follow-up questions, HTML/Markdown report |
-| No tests | **25 automated tests**, run offline with a scripted model inside the real CrewAI crews |
+| No tests | **29 automated tests**, run offline with a scripted model inside the real CrewAI crews |
 
 ## Setup (Windows)
 
@@ -29,13 +29,26 @@ This version is rewritten. These are the improvements:
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt          (CrewAI is large: allow 5-10 minutes)
-python -m pytest -q                      (should say 25 passed)
+python -m pytest -q                      (should say 29 passed)
 python -m streamlit run app.py
 ```
 
 Paste a free Groq key (https://console.groq.com/keys) into the sidebar. It's saved to `.env` and never committed. Without a key, the app runs in **Demo mode**, which uses built-in statistical templates.
 
 Command line: `python main.py data/heart_disease.csv --describe data/heart_disease_description.txt --questions 3`
+
+## Sample datasets (in `data/`)
+
+| File | Rows | Good questions to try |
+|---|---|---|
+| `heart_disease.csv` | 462 | What is associated with coronary heart disease (`chd`)? |
+| `titanic.csv` | 891 | Did class, sex or fare affect survival? |
+| `penguins.csv` | 344 | How do the three species differ in size? |
+| `restaurant_tips.csv` | 244 | Do bigger bills or dinner parties tip more? |
+
+Each has a matching `*_description.txt` you can paste into the app.
+
+**Why duplicate rows are not deleted:** in the Titanic data, 111 rows look identical because there is no passenger name or ID. They are different people with the same class, sex, age and fare. Deleting them changed the results (mean fare of those who died went from 22.12 to 24.03). The agent reports such rows but keeps them.
 
 ## How it works
 

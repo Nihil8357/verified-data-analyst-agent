@@ -59,9 +59,10 @@ def messy_csv(tmp_path):
 def test_cleaning_on_messy_csv(messy_csv, tmp_path):
     s = pipeline.prepare(messy_csv, str(tmp_path / "m"))
     log = " ".join(s.cleaning_log)
-    assert "Unnamed:_0" not in s.df.columns and "Removed 5 duplicate rows" in log
+    assert "Unnamed:_0" not in s.df.columns and "Found 5 identical rows; kept them" in log
+    assert len(s.df) == 125                                            # duplicates flagged, not deleted
     assert "Monthly_Spend" in s.df.columns and column_kind(s.df["Monthly_Spend"]) == "numeric"   # "1,523" -> 1523
-    assert "A table of 120 rows" in s.description                      # auto description when none given
+    assert "A table of 125 rows" in s.description                      # auto description when none given
 
 
 def test_heart_profile_and_card(session):
@@ -216,3 +217,19 @@ def test_groq_switches_model_on_daily_limit(monkeypatch):
     monkeypatch.setattr(llm._client.chat.completions, "create", create)
     assert llm.call("hi") == "hello" and calls == ["openai/gpt-oss-120b", "openai/gpt-oss-20b"]
     assert llm.current == "openai/gpt-oss-20b"
+
+
+def test_titanic_codes_are_categories_and_rows_are_kept(tmp_path):
+    s = pipeline.prepare(str(ROOT / "data" / "titanic.csv"), str(tmp_path / "t"))
+    assert len(s.df) == 891                                            # no passengers silently deleted
+    assert s.profile["columns"]["pclass"]["kind"] == "categorical"     # class 1/2/3 is not a quantity
+    qs = pipeline.plan(s, None, 4)
+    assert all(not (q["columns"] == ["pclass", "survived"] and "t-test" in q["method"]) for q in qs)
+
+
+@pytest.mark.parametrize("name", ["titanic", "penguins", "restaurant_tips"])
+def test_sample_datasets_all_verified(name, tmp_path):
+    desc = (ROOT / "data" / f"{name}_description.txt").read_text()
+    s = pipeline.prepare(str(ROOT / "data" / f"{name}.csv"), str(tmp_path / name), desc)
+    fs = pipeline.run_all(s, pipeline.plan(s, None, 3), None)
+    assert len(fs) == 3 and all(f.label == "Verified" for f in fs)

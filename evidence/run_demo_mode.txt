@@ -14,7 +14,7 @@ Cleaning: Dropped index-like column 'row.names'.
 [question] Q4: How strongly are adiposity and obesity correlated?
 [run     ] using the built-in statistical template
 [label   ] Verified
-[done    ] 4 questions in 6.8s
+[done    ] 4 questions in 7.4s
 
 1. Does age differ between the chd groups?
    [Verified] Mean age by chd is 0: 38.85, 1: 50.29. The difference (Welch t-test) is statistically significant (p-value = 1.317e-19).
@@ -25,4 +25,4 @@ Cleaning: Dropped index-like column 'row.names'.
 4. How strongly are adiposity and obesity correlated?
    [Verified] adiposity and obesity show a strong positive correlation (Pearson r = 0.717, n = 462), which is statistically significant (p-value = 5.661e-74). Correlation does not imply causation.
 
-Report: output/run_20261017_074120/report.html
+Report: output/run_20261017_080414/report.html

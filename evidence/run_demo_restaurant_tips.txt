@@ -1,0 +1,28 @@
+Model: Demo mode (no AI model: built-in statistical templates)
+Cleaning: Found 1 identical rows; kept them, because without an ID column they may be different records. Remove them yourself only if you know they are entry errors.
+
+[plan    ] Demo mode: 4 questions chosen by built-in rules
+[question] Q1: Does total_bill differ between the time groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q2: Does tip differ between the time groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q3: Is sex associated with time?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q4: How strongly are total_bill and tip correlated?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[done    ] 4 questions in 7.0s
+
+1. Does total_bill differ between the time groups?
+   [Verified] Mean total_bill by time is Dinner: 20.8, Lunch: 17.17. The difference (Welch t-test) is statistically significant (p-value = 0.002167).
+2. Does tip differ between the time groups?
+   [Verified] Mean tip by time is Dinner: 3.1, Lunch: 2.73. The difference (Welch t-test) is statistically significant (p-value = 0.04126).
+3. Is sex associated with time?
+   [Verified] The association between sex and time (chi-square = 9.344) is statistically significant (p-value = 0.002237). See the percentage table above for how the rates differ.
+4. How strongly are total_bill and tip correlated?
+   [Verified] total_bill and tip show a strong positive correlation (Pearson r = 0.676, n = 244), which is statistically significant (p-value = 6.692e-34). Correlation does not imply causation.
+
+Report: output/run_20261017_080446/report.html
