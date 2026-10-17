@@ -1,0 +1,28 @@
+Model: Demo mode (no AI model: built-in statistical templates)
+Cleaning: Dropped index-like column 'row.names'.
+
+[plan    ] Demo mode: 4 questions chosen by built-in rules
+[question] Q1: Does age differ between the chd groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q2: Does tobacco differ between the chd groups?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q3: Is famhist associated with chd?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[question] Q4: How strongly are adiposity and obesity correlated?
+[run     ] using the built-in statistical template
+[label   ] Verified
+[done    ] 4 questions in 6.8s
+
+1. Does age differ between the chd groups?
+   [Verified] Mean age by chd is 0: 38.85, 1: 50.29. The difference (Welch t-test) is statistically significant (p-value = 1.317e-19).
+2. Does tobacco differ between the chd groups?
+   [Verified] Mean tobacco by chd is 0: 2.63, 1: 5.52. The difference (Welch t-test) is statistically significant (p-value = 1.038e-08).
+3. Is famhist associated with chd?
+   [Verified] The association between famhist and chd (chi-square = 33.123) is statistically significant (p-value = 8.653e-09). See the percentage table above for how the rates differ.
+4. How strongly are adiposity and obesity correlated?
+   [Verified] adiposity and obesity show a strong positive correlation (Pearson r = 0.717, n = 462), which is statistically significant (p-value = 5.661e-74). Correlation does not imply causation.
+
+Report: output/run_20261017_074120/report.html

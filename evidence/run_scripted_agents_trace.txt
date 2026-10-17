@@ -1,0 +1,14 @@
+TRACE OF THE REAL CREWAI CREWS DRIVEN BY A SCRIPTED TEST MODEL (not Groq).
+The scripted model makes three deliberate mistakes: an invented column, broken code, and a made-up number with causal wording.
+
+[plan    ] Business Consultant agent is reading the data profile...
+[check   ] Dropped a question that used a column not in the data: Does cholesterol matter?
+[plan    ] 2 questions ready
+[question] Q1: Does age differ by chd?
+[repair  ] attempt 1 failed: KeyError: 'agee'
+[run     ] code ran on attempt 2, 1 chart(s)
+[verify  ] sent back for revision: The number 55.0 does not appear in the code output.; 55.0 is not in the output; avoid causal wording
+[verify  ] approved by the Critic, 2/2 numbers matched
+[label   ] Verified
+
+Final answer: People with heart disease are older on average (50.29 vs 38.85 years), and the difference is statistically significant (p < 0.001).

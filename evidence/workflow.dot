@@ -1,0 +1,27 @@
+digraph G {
+  rankdir=TB; nodesep=0.4; ranksep=0.3; bgcolor="white";
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, fillcolor="#EEF2FF", color="#4F46E5"];
+  edge [fontname="Helvetica", fontsize=9, color="#555555"];
+  start [shape=circle, label="", width=0.22, fillcolor="#111111"]; end [shape=doublecircle, label="", width=0.18, fillcolor="#111111"];
+  load [label="Load any CSV\nclean + profile (code)\n'data card' with exact columns"];
+  consult [label="Business Consultant agent\n(CrewAI) -> questions", fillcolor="#FEF3C7", color="#B45309"];
+  valid [label="Column check (code)\ndrop questions with\ninvented columns", fillcolor="#FEE2E2", color="#B91C1C"];
+  human [label="Human review\nedit / remove / add questions", fillcolor="#DCFCE7", color="#15803D"];
+  ds [label="Data Scientist agent\nwrites analysis code", fillcolor="#FEF3C7", color="#B45309"];
+  sandbox [label="Sandbox (code)\nseparate process, 60 s limit,\nblocked unsafe modules"];
+  tmpl [label="Built-in statistical\ntemplate (fallback)"];
+  answer [label="Data Scientist agent\nwrites the answer\nfrom the real output", fillcolor="#FEF3C7", color="#B45309"];
+  verify [label="Verifier (code)\nnumbers in output? p-value\nmatches 'significant'? causal\nwording? real columns?", fillcolor="#FEE2E2", color="#B91C1C"];
+  critic [label="Critic agent (Reflection)\napprove / reject", fillcolor="#FEF3C7", color="#B45309"];
+  label [label="Trust label\nVerified / Partly verified / Rejected\n+ HTML/Markdown report"];
+  ask [label="Ask your data\n(follow-up questions)", fillcolor="#DCFCE7", color="#15803D"];
+  start -> load -> consult -> valid -> human -> ds -> sandbox;
+  sandbox -> ds [label="error -> fix\n(max 3 tries)"];
+  sandbox -> tmpl [label="3 failures"];
+  sandbox -> answer [label="ok"];
+  tmpl -> answer;
+  answer -> verify -> critic;
+  critic -> answer [label="rejected -> revise\n(max 2)"];
+  critic -> label [label="approved /\nlimit reached"];
+  label -> end; label -> ask [style=dashed]; ask -> ds [style=dashed];
+}
