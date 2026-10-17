@@ -1,0 +1,13 @@
+crewai==1.15.28
+groq>=1.0
+python-dotenv>=1.0
+pyyaml>=6.0
+pandas>=2.2
+numpy>=1.26
+scipy>=1.11
+statsmodels>=0.14
+scikit-learn>=1.4
+matplotlib>=3.8
+seaborn>=0.13
+streamlit>=1.40
+pytest>=8.0
