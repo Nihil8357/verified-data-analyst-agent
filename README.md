@@ -21,7 +21,7 @@ This version is rewritten. These are the improvements:
 | No user control | **Human in the loop**: edit, remove or add questions before the analysis runs |
 | Data cleaning was a TODO | Cleaning step: index columns, text-encoded numbers, empty columns; duplicate rows are flagged but kept (see below) |
 | Command line only | **Streamlit app**, **Ask your data** follow-up questions, HTML/Markdown report |
-| No tests | **30 automated tests**, run offline with a scripted model inside the real CrewAI crews |
+| No tests | **31 automated tests**, run offline with a scripted model inside the real CrewAI crews |
 
 ## Setup (Windows)
 
@@ -29,7 +29,7 @@ This version is rewritten. These are the improvements:
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt          (CrewAI is large: allow 5-10 minutes)
-python -m pytest -q                      (should say 30 passed)
+python -m pytest -q                      (should say 31 passed)
 python -m streamlit run app.py
 ```
 

@@ -1,39 +1,41 @@
 ============================= test session starts ==============================
-platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0 -- /tmp/claude-0/-home-claude/a0fdbfa3-c71f-590a-a49e-713bcf07a84c/scratchpad/crewenv/bin/python
+platform linux -- Python 3.13.16, pytest-9.1.1, pluggy-1.7.0 -- /usr/bin/python3
+cachedir: .pytest_cache
 rootdir: /home/claude/verified-data-analyst-agent
 configfile: pytest.ini
-plugins: platformdirs-4.13.3, anyio-4.15.1
-collecting ... collected 30 items
+plugins: anyio-4.15.1, langsmith-0.14.11
+collecting ... collected 31 items
 
 tests/test_agent.py::test_cleaning_on_messy_csv PASSED                   [  3%]
 tests/test_agent.py::test_heart_profile_and_card PASSED                  [  6%]
-tests/test_agent.py::test_sandbox_runs_code_and_finds_chart PASSED       [ 10%]
-tests/test_agent.py::test_sandbox_reports_errors_and_timeouts PASSED     [ 13%]
+tests/test_agent.py::test_sandbox_runs_code_and_finds_chart PASSED       [  9%]
+tests/test_agent.py::test_sandbox_reports_errors_and_timeouts PASSED     [ 12%]
 tests/test_agent.py::test_sandbox_blocks_dangerous_code[import subprocess\nsubprocess.run('dir')] PASSED [ 16%]
-tests/test_agent.py::test_sandbox_blocks_dangerous_code[import os\nos.system('del x')] PASSED [ 20%]
-tests/test_agent.py::test_sandbox_blocks_dangerous_code[import requests] PASSED [ 23%]
-tests/test_agent.py::test_sandbox_blocks_dangerous_code[eval('1+1')] PASSED [ 26%]
-tests/test_agent.py::test_extract_code PASSED                            [ 30%]
-tests/test_agent.py::test_verifier_accepts_rounded_numbers_and_p_bounds PASSED [ 33%]
-tests/test_agent.py::test_verifier_catches_wrong_claims[Strong correlation r = 0.72.-0.72 does not appear] PASSED [ 36%]
-tests/test_agent.py::test_verifier_catches_wrong_claims[The result is significant.-None] PASSED [ 40%]
-tests/test_agent.py::test_verifier_catches_wrong_claims[Significant at p < 0.00001.-smallest printed p-value] PASSED [ 43%]
-tests/test_agent.py::test_verifier_catches_wrong_claims[High `cholesterol` matters, r = 0.19.-column `cholesterol`] PASSED [ 46%]
-tests/test_agent.py::test_verifier_significance_and_causal_language PASSED [ 50%]
-tests/test_agent.py::test_invalid_columns_are_dropped_and_replaced PASSED [ 53%]
-tests/test_agent.py::test_code_repair_and_critic_revision PASSED         [ 56%]
-tests/test_agent.py::test_fallback_template_after_three_failed_attempts PASSED [ 60%]
-tests/test_agent.py::test_persistently_wrong_answer_is_rejected PASSED   [ 63%]
-tests/test_agent.py::test_critic_concern_without_number_errors_is_a_warning PASSED [ 66%]
-tests/test_agent.py::test_demo_mode_end_to_end_all_verified PASSED       [ 70%]
-tests/test_agent.py::test_demo_mode_on_any_csv PASSED                    [ 73%]
-tests/test_agent.py::test_ask_your_data PASSED                           [ 76%]
-tests/test_agent.py::test_reports PASSED                                 [ 80%]
-tests/test_agent.py::test_groq_switches_model_on_daily_limit PASSED      [ 83%]
-tests/test_agent.py::test_titanic_codes_are_categories_and_rows_are_kept PASSED [ 86%]
-tests/test_agent.py::test_sample_datasets_all_verified[titanic] PASSED   [ 90%]
-tests/test_agent.py::test_sample_datasets_all_verified[penguins] PASSED  [ 93%]
-tests/test_agent.py::test_sample_datasets_all_verified[restaurant_tips] PASSED [ 96%]
-tests/test_agent.py::test_pasted_key_is_cleaned_and_bad_key_gives_clear_message PASSED [100%]
+tests/test_agent.py::test_sandbox_blocks_dangerous_code[import os\nos.system('del x')] PASSED [ 19%]
+tests/test_agent.py::test_sandbox_blocks_dangerous_code[import requests] PASSED [ 22%]
+tests/test_agent.py::test_sandbox_blocks_dangerous_code[eval('1+1')] PASSED [ 25%]
+tests/test_agent.py::test_extract_code PASSED                            [ 29%]
+tests/test_agent.py::test_verifier_accepts_rounded_numbers_and_p_bounds PASSED [ 32%]
+tests/test_agent.py::test_verifier_catches_wrong_claims[Strong correlation r = 0.72.-0.72 does not appear] PASSED [ 35%]
+tests/test_agent.py::test_verifier_catches_wrong_claims[The result is significant.-None] PASSED [ 38%]
+tests/test_agent.py::test_verifier_catches_wrong_claims[Significant at p < 0.00001.-smallest printed p-value] PASSED [ 41%]
+tests/test_agent.py::test_verifier_catches_wrong_claims[High `cholesterol` matters, r = 0.19.-column `cholesterol`] PASSED [ 45%]
+tests/test_agent.py::test_verifier_significance_and_causal_language PASSED [ 48%]
+tests/test_agent.py::test_invalid_columns_are_dropped_and_replaced PASSED [ 51%]
+tests/test_agent.py::test_code_repair_and_critic_revision PASSED         [ 54%]
+tests/test_agent.py::test_fallback_template_after_three_failed_attempts PASSED [ 58%]
+tests/test_agent.py::test_persistently_wrong_answer_is_rejected PASSED   [ 61%]
+tests/test_agent.py::test_critic_concern_without_number_errors_is_a_warning PASSED [ 64%]
+tests/test_agent.py::test_demo_mode_end_to_end_all_verified PASSED       [ 67%]
+tests/test_agent.py::test_demo_mode_on_any_csv PASSED                    [ 70%]
+tests/test_agent.py::test_ask_your_data PASSED                           [ 74%]
+tests/test_agent.py::test_reports PASSED                                 [ 77%]
+tests/test_agent.py::test_groq_switches_model_on_daily_limit PASSED      [ 80%]
+tests/test_agent.py::test_titanic_codes_are_categories_and_rows_are_kept PASSED [ 83%]
+tests/test_agent.py::test_sample_datasets_all_verified[titanic] PASSED   [ 87%]
+tests/test_agent.py::test_sample_datasets_all_verified[penguins] PASSED  [ 90%]
+tests/test_agent.py::test_sample_datasets_all_verified[restaurant_tips] PASSED [ 93%]
+tests/test_agent.py::test_pasted_key_is_cleaned_and_bad_key_gives_clear_message PASSED [ 96%]
+tests/test_app.py::test_upload_questions_survive_clicks_and_analysis_runs PASSED [100%]
 
-============================= 30 passed in 51.63s ==============================
+======================== 31 passed in 62.28s (0:01:02) =========================

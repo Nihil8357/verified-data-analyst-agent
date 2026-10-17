@@ -69,14 +69,17 @@ st.subheader("1. Data")
 c1, c2 = st.columns([2, 1])
 up = c1.file_uploader("CSV file", type=["csv"])
 use_sample = c2.button("Use sample: heart disease data")
-if up or use_sample:
-    if up:
-        tmp = Path(tempfile.mkdtemp()) / up.name
-        tmp.write_bytes(up.getvalue())
-        src, desc = str(tmp), ""
-    else:
-        src, desc = str(SAMPLE), SAMPLE_DESC
-    ss.src, ss.desc_default = src, desc
+# The uploader keeps returning the same file on every click, so only a NEW file (or the sample button)
+# starts a new analysis; otherwise every button press would wipe the questions and results.
+new_src = None
+if use_sample:
+    new_src, desc, ss.upload_id = str(SAMPLE), SAMPLE_DESC, None
+elif up is not None and ss.get("upload_id") != (up.name, up.size):
+    tmp = Path(tempfile.mkdtemp()) / up.name
+    tmp.write_bytes(up.getvalue())
+    new_src, desc, ss.upload_id = str(tmp), "", (up.name, up.size)
+if new_src:
+    ss.src, ss.desc_default = new_src, desc
     for k in ("session", "questions", "findings", "chat"):
         ss.pop(k, None)
 
@@ -107,19 +110,22 @@ if "session" in ss:
         with st.spinner("Business Consultant agent is reading the data..."):
             try:
                 ss.questions = pipeline.plan(s, ss.llm, n_q)
+                ss.qver = ss.get("qver", 0) + 1     # new boxes, so the new questions are shown, not the old text
             except Exception as e:  # BadKey, ModelUnavailable, network errors
                 st.error(friendly(e))
     if "questions" in ss:
         st.caption("Edit, remove or add questions before the analysis runs.")
         edited = []
+        v = ss.get("qver", 0)
         for i, q in enumerate(ss.questions):
             a, b, c = st.columns([5, 3, 1])
-            text = a.text_input(f"Question {i + 1}", q["question"], key=f"qt{i}")
+            text = a.text_input(f"Question {i + 1}", q["question"], key=f"qt{v}_{i}",
+                                placeholder="Type your own question, e.g. Did women survive more than men?")
             cols = b.multiselect("Columns", list(s.df.columns), [x for x in q["columns"] if x in s.df.columns],
-                                 key=f"qc{i}", max_selections=2)
-            keep = c.checkbox("Use", True, key=f"qk{i}")
+                                 key=f"qc{v}_{i}", max_selections=2)
+            keep = c.checkbox("Use", True, key=f"qk{v}_{i}")
             if keep and text.strip():
-                edited.append({**q, "question": text, "columns": cols})
+                edited.append({**q, "question": text, "columns": cols or pipeline.guess_columns(s.df, text)})
         if st.button("Add a question"):
             ss.questions.append({"question": "", "columns": [], "method": ""})
             st.rerun()

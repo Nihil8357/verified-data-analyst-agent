@@ -163,11 +163,16 @@ def run_all(session: Session, questions: list[dict], llm, emit: Emit = lambda k,
     return findings
 
 
+def guess_columns(df, text: str) -> list[str]:
+    """Columns named in a typed question (at most 2), e.g. 'Does fare differ by survived?' -> fare, survived."""
+    import re
+    return [c for c in df.columns if re.search(rf"\b{re.escape(c)}\b", text, re.I)][:2]
+
+
 def ask(session: Session, text: str, llm, idx: int, emit: Emit = lambda k, t: None) -> Finding:
     """'Ask your data': any follow-up question in plain English, answered with verified numbers."""
-    import re
-    mentioned = [c for c in session.df.columns if re.search(rf"\b{re.escape(c)}\b", text, re.I)]
-    q = {"question": text.strip(), "columns": mentioned[:2], "method": ""}
+    mentioned = guess_columns(session.df, text)
+    q = {"question": text.strip(), "columns": mentioned, "method": ""}
     if llm is None and not mentioned:
         f = Finding(q["question"], [], "")
         f.issues = ["Demo mode can only answer questions that name one or two columns, e.g. 'Does age differ by chd?'. "
